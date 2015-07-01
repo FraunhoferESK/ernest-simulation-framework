@@ -23,6 +23,7 @@
 #include "signal.hpp"
 #include "osek_os.hpp"
 #include "runtime_environment.hpp"
+#include "simulator.hpp"
 
 namespace ERNEST
 {
@@ -48,7 +49,8 @@ public:
      *
      * @param context is the context of a task
      */
-    BasicPort(TaskContext* context) : m_signal_id(nullptr), m_is_bound(false), m_context(context)
+    BasicPort(const char* name, TaskContext* context) :
+        m_signal_id(nullptr), m_is_bound(false), m_context(context), m_name(name), m_error_logged(false)
     {
     }
 
@@ -66,7 +68,7 @@ public:
             m_signal_id = signal_id;
             m_is_bound = true;
         } else {
-            std::cerr << "Attempt to rebind signal on port" << std::endl;
+            Simulator::Log() << "Attempt to rebind signal: " << signal_id << " on: " << m_name << std::endl;
         }
     }
 
@@ -98,7 +100,10 @@ public:
         if (m_is_bound) {
             m_context->os->GetRuntimeEnvironment()->SendSignal(m_signal_id, m_data);
         } else {
-            std::cerr << "Port not bound to signal" << std::endl;
+            if (m_error_logged == false) {
+                Simulator::Err() << "Port: " << m_name << " not bound to signal: " << m_signal_id << std::endl;
+                m_error_logged = true;
+            }
         }
     }
 
@@ -121,7 +126,10 @@ public:
         if (m_is_bound) {
             m_context->os->GetRuntimeEnvironment()->ReadSignal(m_signal_id, m_data);
         } else {
-            std::cerr << "Port not bound to signal" << std::endl;
+            if (m_error_logged == false) {
+                Simulator::Err() << "Port: " << m_name << " not bound to signal: " << m_signal_id << std::endl;
+                m_error_logged = true;
+            }
         }
     }
 
@@ -143,10 +151,12 @@ protected:
     bool m_is_bound;
     TaskContext* m_context;
     DataType m_data;
+    const char* m_name;
 
 private:
     BasicPort(const BasicPort&);
     BasicPort& operator=(const BasicPort&);
+    bool m_error_logged;
 };
 
 /**

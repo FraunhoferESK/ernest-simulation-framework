@@ -63,18 +63,16 @@ void Simulator::Start()
     Simulator::Log() << "Simulation finished." << std:: endl;
 }
 
-/**
- * Write logging information.
- *
- * This function should be used in favor of directly writing to stdout
- * or stderr.
- *
- * @param message The message to log
- */
 std::ostream& Simulator::Log()
 {
     std::cout << "[ERNEST][LOG]: ";
     return std::cout;
+}
+
+std::ostream& Simulator::Err()
+{
+    std::cerr << "[ERNEST][ERR]: ";
+    return std::cerr;
 }
 
 } // namespace ERNEST

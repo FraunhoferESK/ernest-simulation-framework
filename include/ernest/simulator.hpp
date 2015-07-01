@@ -68,7 +68,23 @@ public:
      */
     static void SetTraceRecorder(ITraceRecorder* recorder);
 
+    /**
+     * Write logging information.
+     *
+     * This function should be used in favor of directly writing to stdout.
+     *
+     * @param message The message to log
+     */
     static std::ostream& Log();
+
+    /**
+     * Write error information.
+     *
+     * This function should be used in favor of directly writing to stderr.
+     *
+     * @param message The message to report an error
+     */
+    static std::ostream& Err();
 
 private:
     /**

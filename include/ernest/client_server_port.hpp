@@ -57,8 +57,8 @@ template <class Interface>
 class ClientServerPort : public BasicPort<boost::function<void ()> >
 {
 public:
-    ClientServerPort(std::string name, TaskContext* context) :
-        BasicPort(context), m_interface(this) {}
+    ClientServerPort(const char* name, TaskContext* context) :
+        BasicPort(name, context), m_interface(this) {}
 
     template <class RequiredInterface, class ProvidedInterface>
     friend void connect_ports(ClientServerPort<RequiredInterface>& src_port,

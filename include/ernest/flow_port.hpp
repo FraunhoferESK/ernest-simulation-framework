@@ -51,8 +51,7 @@ public:
      * @param name of the FlowPort
      */
     FlowPort(const char* name, TaskContext *context, const char* uri = nullptr) :
-        BasicPort<DataType>(context),
-        m_name(name),
+        BasicPort<DataType>(name, context),
         m_uri(uri)
     {
         if (m_uri != nullptr) {
@@ -78,7 +77,7 @@ public:
         assert(P == Out || P == InOut);
         if (m_is_tracing) {
             sc_time ts = sc_time_stamp();
-            m_recorder->WriteEvent(m_name, m_uri, ts.to_double());
+            m_recorder->WriteEvent(BasicPort<DataType>::m_name, m_uri, ts.to_double());
         }
         this->SendSignal();
     }
@@ -91,7 +90,7 @@ public:
         assert(P == In || P == InOut);
         if (m_is_tracing) {
             sc_time ts = sc_time_stamp();
-            m_recorder->WriteEvent(m_name, m_uri, ts.to_double());
+            m_recorder->WriteEvent(BasicPort<DataType>::m_name, m_uri, ts.to_double());
         }
         this->ReadSignal();
     }
@@ -137,7 +136,6 @@ public:
 
 private:
     FlowPort(const FlowPort&);
-    const char* m_name;
     const char* m_uri;
     bool m_is_tracing;
     ITraceRecorder* m_recorder;
