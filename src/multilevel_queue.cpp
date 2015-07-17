@@ -17,7 +17,7 @@
  * along with ERNEST.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ernest/ernest_addition.hpp"
-#include "multilevel_queue.hpp"
+#include "ernest/multilevel_queue.hpp"
 
 namespace ERNEST
 {
