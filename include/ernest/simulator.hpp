@@ -86,6 +86,16 @@ public:
      */
     static std::ostream& Err();
 
+    /**
+     * Write warning information.
+     *
+     * This function should be used in favor of directly writing to stdout 
+     * to issue a warning.
+     *
+     * @param message The message to report an error
+     */
+    static std::ostream& Warning();
+
 private:
     /**
      * Disable copy constructor

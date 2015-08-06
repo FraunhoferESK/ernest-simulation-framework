@@ -65,14 +65,21 @@ void Simulator::Start()
 
 std::ostream& Simulator::Log()
 {
-    std::cout << "[ERNEST][LOG]: ";
+    std::cout << "[ERNEST][INFO]: ";
     return std::cout;
 }
 
 std::ostream& Simulator::Err()
 {
-    std::cerr << "[ERNEST][ERR]: ";
+    std::cerr << "[ERNEST][ERROR]: ";
     return std::cerr;
 }
+
+std::ostream& Simulator::Warning()
+{
+    std::cout << "[ERNEST][WARNING]: ";
+    return std::cout;
+}
+
 
 } // namespace ERNEST
