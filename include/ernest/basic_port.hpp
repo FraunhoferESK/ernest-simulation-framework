@@ -101,7 +101,7 @@ public:
             m_context->os->GetRuntimeEnvironment()->SendSignal(m_signal_id, m_data);
         } else {
             if (m_error_logged == false) {
-                Simulator::Err() << "Port: " << m_name << " not bound to signal: " << m_signal_id << std::endl;
+                Simulator::Warning() << "Port: " << m_name << " not bound to signal: " << m_signal_id << std::endl;
                 m_error_logged = true;
             }
         }
@@ -127,7 +127,7 @@ public:
             m_context->os->GetRuntimeEnvironment()->ReadSignal(m_signal_id, m_data);
         } else {
             if (m_error_logged == false) {
-                Simulator::Err() << "Port: " << m_name << " not bound to signal: " << m_signal_id << std::endl;
+                Simulator::Warning() << "Port: " << m_name << " not bound to signal: " << m_signal_id << std::endl;
                 m_error_logged = true;
             }
         }
