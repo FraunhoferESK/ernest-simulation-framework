@@ -26,6 +26,7 @@
 #include "execution_specification_interface.hpp"
 #include "alarm.hpp"
 #include "alarm_listener.hpp"
+#include "time.hpp"
 
 namespace ERNEST
 {
@@ -124,7 +125,7 @@ public:
      *
      * @return absolute deadline of this task.
      */
-    sc_time GetAbsoluteDeadline();
+    Time GetAbsoluteDeadline();
 
     /**
      * Set the absolute deadline of this task.
@@ -132,7 +133,7 @@ public:
      * @param activation_time when this task was activated
      * @param deadline time in ms for task execution.
      */
-    void SetAbsoluteDeadline(sc_time activation_time, int deadline);
+    void SetAbsoluteDeadline(Time activation_time, int deadline);
 
     /**
      * Set the activation time of this task.
@@ -140,7 +141,7 @@ public:
      * @param activation_time absolute time when this task was activated.
      */
 
-    void SetTaskActivationTime(sc_time activation_time);
+    void SetTaskActivationTime(Time activation_time);
 
     /**
      * Set the state of this task.
@@ -278,9 +279,9 @@ private:
     Ecu* m_ecu;
     int m_priority;
     int m_deadline;
-    sc_time m_absolute_deadline;
-    sc_time m_task_activation_time;
-    sc_time m_task_execution_time;
+    Time m_absolute_deadline;
+    Time m_task_activation_time;
+    Time m_task_execution_time;
     TaskState m_current_state;
     Scheduler* m_scheduler;
     sc_process_handle m_process_handle;

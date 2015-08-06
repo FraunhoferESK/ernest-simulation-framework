@@ -81,5 +81,10 @@ std::ostream& Simulator::Warning()
     return std::cout;
 }
 
+Time Simulator::TimeStamp()
+{
+    sc_time ts = sc_time_stamp();
+    return Time(ts.to_double(), Milliseconds);
+}
 
 } // namespace ERNEST

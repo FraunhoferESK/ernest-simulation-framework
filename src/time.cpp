@@ -61,6 +61,10 @@ private:
 	double m_milliseconds;
 };
 
+Time::Time() : m_impl(new TimeImpl(0, Milliseconds))
+{
+}
+  
 Time::Time(double amount, TimeUnit unit) : m_impl(new TimeImpl(amount, unit))
 {
 }
@@ -90,6 +94,11 @@ Time Time::operator-(Time& rhs)
 {
 	double difference = GetMilliseconds() - rhs.GetMilliseconds();
 	return milliseconds(difference);
+}
+
+bool Time::operator<(Time& rhs)
+{
+    return GetMilliseconds() < rhs.GetMilliseconds();
 }
 
 

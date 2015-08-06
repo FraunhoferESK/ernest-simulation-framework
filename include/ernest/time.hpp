@@ -37,6 +37,11 @@ class TimeImpl;
  */
 class Time {
 public:
+    /**
+     * Default constructor for Time
+     */
+    Time();
+
 	/**
 	 * Construct a time object
 	 *
@@ -69,6 +74,8 @@ public:
 	Time operator+(Time& rhs);
 
 	Time operator-(Time& rhs);
+
+    bool operator<(Time& rhs);
 
 private:
 	TimeImpl* m_impl;

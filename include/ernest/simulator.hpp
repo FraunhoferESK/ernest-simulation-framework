@@ -96,6 +96,11 @@ public:
      */
     static std::ostream& Warning();
 
+    /**
+     * Create a timestamp in simulated time.
+     */
+    static Time TimeStamp();
+
 private:
     /**
      * Disable copy constructor

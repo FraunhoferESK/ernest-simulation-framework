@@ -173,24 +173,24 @@ void Task::SetDeadline(int deadline)
     m_deadline = deadline;
 }
 
-sc_time Task::GetAbsoluteDeadline()
+Time Task::GetAbsoluteDeadline()
 {
     return m_absolute_deadline;
 }
 
-void Task::SetAbsoluteDeadline(sc_time activation_time, int deadline)
+void Task::SetAbsoluteDeadline(Time activation_time, int deadline)
 {
     m_deadline = deadline;
     m_task_activation_time = activation_time;
-    m_absolute_deadline = sc_time((m_task_activation_time.to_double()
-                                   + m_deadline), SC_MS);
+    m_absolute_deadline = Time(m_task_activation_time.GetMilliseconds()
+                               + m_deadline, Milliseconds);
 }
 
-void Task::SetTaskActivationTime(sc_time activation_time)
+void Task::SetTaskActivationTime(Time activation_time)
 {
     m_task_activation_time = activation_time;
-    m_absolute_deadline = sc_time((m_task_activation_time.to_double()
-                                   + m_deadline), SC_MS);
+    m_absolute_deadline = Time(m_task_activation_time.GetMilliseconds()
+                               + m_deadline, Milliseconds);
 }
 
 void Task::Notify() 
