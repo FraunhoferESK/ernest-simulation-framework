@@ -1,6 +1,10 @@
 # The ERNEST simulation framework
 The ERNEST framework (EaRly verification and validation of Networked Embedded SysTems) is an open platform developed by Fraunhofer ESK for the early-stage analysis of component-based software in networked embedded systems. The aim is to allow the validation of non-functional requirements while the system is still being modelled and designed. To do this ERNEST links an in-house developed simulation framework with the Eclipse development environment, which offers the flexibility to use the platform in model-driven design processes.
 
+# Download Ready-to-Use Eclipse Platform
+Although ERNEST is open source and can be downloaded from GitHub, the simplest way to test ERNEST is the ready-to-use Eclipse, with ERNEST, an example Model and a tutorial, available at:
+http://s.fhg.de/ERNEST-en
+
 # Integration and adaptability
 One of the primary design goals of the ERNEST platform is its broad utility. For this reason the engineers focused on ensuring the analysis runs independent of the language used to model the system architecture. This is achieved by means of a proprietary meta model that makes it possible to represent the simulation-relevant information and extract it from an output model. ERNEST currently features a transformation function that supports models based on the EAST-ADL architecture description language. EAST-ADL is prevalent in the automobile industry where it is used to describe relevant hardware and software relationships. Additional transformation processes are also possible for other modelling languages, such as UML/MARTE and AUTOSAR/Artop, and have been implemented prototypically
 
