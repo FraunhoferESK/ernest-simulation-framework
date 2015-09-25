@@ -61,11 +61,10 @@ enum TaskState {
     WAITING
 };
 
-class Task : public sc_module, public AlarmListener
+class Task : public AlarmListener
 {
 
 public:
-    SC_HAS_PROCESS(Task);
     sc_event start;
     sc_mutex state_lock;
     Task(sc_module_name instname);

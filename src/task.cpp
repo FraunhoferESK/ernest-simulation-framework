@@ -26,7 +26,6 @@ namespace ERNEST
 {
 
 Task::Task(sc_module_name instname) :
-    sc_module(instname),
 	m_ecu(nullptr),
 	m_priority(0),
 	m_deadline(0),
@@ -36,9 +35,7 @@ Task::Task(sc_module_name instname) :
 	m_alarm(nullptr)
 {
     m_move_task_state = false;
-    SC_THREAD(Execute);
     m_process_handle = sc_get_current_process_handle();
-    sensitive << start;
 }
 
 Task::~Task()
