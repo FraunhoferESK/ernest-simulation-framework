@@ -64,22 +64,26 @@ private:
 Time::Time() : m_impl(new TimeImpl(0, Milliseconds))
 {
 }
+
+Time::Time(int t) : m_impl(new TimeImpl(0, Milliseconds))
+{
+}
   
 Time::Time(double amount, TimeUnit unit) : m_impl(new TimeImpl(amount, unit))
 {
 }
 
-double Time::GetSeconds()
+double Time::GetSeconds() const
 {
 	return m_impl->GetSeconds();
 }
 
-double Time::GetMilliseconds()
+double Time::GetMilliseconds() const
 {
 	return m_impl->GetMilliseconds();
 }
 
-double Time::GetMicroseconds()
+double Time::GetMicroseconds() const
 {
 	return m_impl->GetMicroseconds();
 }
@@ -101,6 +105,14 @@ bool Time::operator<(Time& rhs)
     return GetMilliseconds() < rhs.GetMilliseconds();
 }
 
+bool Time::operator==(const Time& rhs) const
+{
+	return (GetMilliseconds() == rhs.GetMilliseconds());
+}
 
+bool Time::operator!=(const Time& rhs) const
+{
+	return !(*this==rhs);
+}
 
 } // namespace ERNEST

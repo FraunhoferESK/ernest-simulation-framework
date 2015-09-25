@@ -42,6 +42,11 @@ public:
      */
     Time();
 
+    /**
+     * Allow casting integer to time
+     */
+    Time(int t);
+
 	/**
 	 * Construct a time object
 	 *
@@ -55,27 +60,30 @@ public:
 	 *
 	 * @returns The time in seconds
 	 */
-	double GetSeconds();
+	double GetSeconds() const;
 
 	/**
 	 * Get time in milliseconds
 	 *
 	 * @returns The time in milliseconds
 	 */
-	double GetMilliseconds();
+	double GetMilliseconds() const;
 
 	/**
 	 * Get time in microseconds
 	 *
 	 * @returns The time in microseconds
 	 */
-	double GetMicroseconds();
+	double GetMicroseconds() const;
 
 	Time operator+(Time& rhs);
 
 	Time operator-(Time& rhs);
 
     bool operator<(Time& rhs);
+
+    bool operator==(const Time& rhs) const;
+    bool operator!=(const Time& rhs) const;
 
 private:
 	TimeImpl* m_impl;
