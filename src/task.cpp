@@ -48,7 +48,7 @@ Task::~Task()
     }
 }
 
-void Task::Execute()
+void Task::Execute(Time& max_runtime)
 {
     list<SoftwareFunction*>::iterator it;
 

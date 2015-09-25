@@ -156,7 +156,7 @@ public:
      * Execute associated software functions, pull and push their
      * ports.
      */
-    void Execute();
+    void Execute(Time& max_runtime);
 
     /**
      * Preempt this task
