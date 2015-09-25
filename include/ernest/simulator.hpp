@@ -101,6 +101,11 @@ public:
      */
     static Time TimeStamp();
 
+    /**
+     * Elapse time in simulator.
+     */
+    static void Wait(Time& t);
+
 private:
     /**
      * Disable copy constructor
