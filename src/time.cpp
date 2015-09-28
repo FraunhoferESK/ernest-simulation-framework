@@ -94,6 +94,13 @@ Time Time::operator+(Time& rhs)
 	return milliseconds(sum);
 }
 
+Time Time::operator+=(Time& rhs)
+{
+	double sum = GetMilliseconds() + rhs.GetMilliseconds();
+	m_impl->SetMilliseconds(sum);
+	return milliseconds(sum);
+}
+
 Time Time::operator-(Time& rhs)
 {
 	double difference = GetMilliseconds() - rhs.GetMilliseconds();
@@ -103,6 +110,11 @@ Time Time::operator-(Time& rhs)
 bool Time::operator<(Time& rhs)
 {
     return GetMilliseconds() < rhs.GetMilliseconds();
+}
+
+bool Time::operator<=(Time& rhs)
+{
+    return GetMilliseconds() <= rhs.GetMilliseconds();
 }
 
 bool Time::operator==(const Time& rhs) const

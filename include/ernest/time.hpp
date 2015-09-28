@@ -77,10 +77,12 @@ public:
 	double GetMicroseconds() const;
 
 	Time operator+(Time& rhs);
+	Time operator+=(Time& rhs);
 
 	Time operator-(Time& rhs);
 
     bool operator<(Time& rhs);
+    bool operator<=(Time& rhs);
 
     bool operator==(const Time& rhs) const;
     bool operator!=(const Time& rhs) const;
