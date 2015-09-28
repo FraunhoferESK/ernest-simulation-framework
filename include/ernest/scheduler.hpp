@@ -20,6 +20,7 @@
 #define ERNEST_SCHEDULER_HEADER
 
 #include <ernest/ernest_systemc.hpp>
+#include <ernest/alarm_listener.hpp>
 
 namespace ERNEST
 {
@@ -28,13 +29,15 @@ using namespace std;
 class Task;
 class ExecutionSpecificationInterface;
 
-class Scheduler
+class Scheduler : public AlarmListener
 {
 public:
     /**
      * Destructor.
      */
-    virtual ~Scheduler(void) {};
+    virtual ~Scheduler() {};
+
+    void Update();
 
     /**
      * Creates a task to be used with this scheduler. The returned
@@ -58,17 +61,8 @@ public:
     /**
      * Determine the task that should run now and run it.
      */
-    virtual void Schedule() = 0;
+    virtual Task* Schedule() = 0;
 
-    /**
-     * Terminate a task's execution. May only be called for a running
-     * task.
-     *
-     * @param task The task to terminate.
-     */
-    virtual void TerminateTask(Task* task) = 0;
-    virtual void DeleteTask(Task* task) = 0;
-    virtual void InsertTask(Task* task) = 0;
 };
 
 } // namespace ERNEST
