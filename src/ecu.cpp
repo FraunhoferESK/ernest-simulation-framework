@@ -32,7 +32,6 @@ Ecu::Ecu(sc_module_name instname) : sc_module(instname)
 void Ecu::Process(void)
 {
     while(true) {
-        wait(1.0, SC_MS);
         GetService<OsekOS>()->Update();
     }
 }
