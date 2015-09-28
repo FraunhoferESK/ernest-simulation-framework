@@ -17,6 +17,7 @@
  * along with ERNEST.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <ernest/task.hpp>
+#include <ernest/simulator.hpp>
 #include <ernest/scheduler.hpp>
 #include <ernest/software_function.hpp>
 #include <ernest/ernest_addition.hpp>
@@ -45,21 +46,18 @@ Task::~Task()
     }
 }
 
-void Task::Execute(Time& max_runtime)
+TaskState Task::Execute(Time& max_runtime)
 {
     list<SoftwareFunction*>::iterator it;
 
-    wait(start);
-    while (true) {
-        assert(m_current_state == RUNNING);
-        for(it = m_software_functions.begin(); it != m_software_functions.end(); it++) {
-            (*it)->PullPorts();
-            (*it)->Exec();
-            wait(sc_time(m_execution_interface->GetExecutionTime().GetMilliseconds(), SC_MS));
-            (*it)->PushPorts();
-        }
-        m_scheduler->TerminateTask(this);
-    }
+	for (it = m_software_functions.begin(); it != m_software_functions.end(); it++) {
+		(*it)->PullPorts();
+		(*it)->Exec();
+		Simulator::Wait(m_execution_interface->GetExecutionTime());
+		(*it)->PushPorts();
+	}
+
+	return SUSPENDED;
 }
 
 void Task::SetState(TaskState state)

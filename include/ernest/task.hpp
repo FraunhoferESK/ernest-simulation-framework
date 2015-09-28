@@ -155,7 +155,7 @@ public:
      * Execute associated software functions, pull and push their
      * ports.
      */
-    void Execute(Time& max_runtime);
+    TaskState Execute(Time& max_runtime);
 
     /**
      * Preempt this task
@@ -287,6 +287,9 @@ private:
     ExecutionSpecificationInterface* m_execution_interface;
     bool m_move_task_state;
     Alarm* m_alarm;
+
+    Time m_current_runtime;
+    Time m_total_runtime;
 };
 
 /**
