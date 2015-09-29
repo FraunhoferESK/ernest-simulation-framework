@@ -19,8 +19,10 @@
 #ifndef ERNEST_ALARM_HEADER
 #define ERNEST_ALARM_HEADER
 
+#include "osek_service.hpp"
 #include "alarm_listener.hpp"
 #include "time.hpp"
+
 
 namespace ERNEST
 {
@@ -36,10 +38,11 @@ struct Alarm;
  * This class provides timer functionality. It allows clients which
  * implement \ref AlarmListener to be notified when the timer expires.
  */
-class Timer
+class Timer : public OsekService
 {
 public:
-    Timer();
+	Timer();
+
     /**
      * During update expired alarms are checked and the registered
      * clients (\ref AlarmListener) are notified.
@@ -74,8 +77,6 @@ public:
      * @param alarm Reference to the alarm to be removed.
      */
     void DeleteAlarm(AlarmListener* listener);
-
-
 
 private:
     /**

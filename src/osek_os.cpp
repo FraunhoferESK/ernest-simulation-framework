@@ -31,6 +31,7 @@ OsekOS::OsekOS(Ecu* ecu) : Service(ecu)
 {
     m_scheduler = nullptr;
     m_timer = new Timer();
+    m_timer->SetOsekOs(this);
     m_rte = new RuntimeEnvironment(this);
     m_com = new CommunicationManager(this);
 }
