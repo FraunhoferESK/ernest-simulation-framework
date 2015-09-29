@@ -90,6 +90,7 @@ public:
 
     RuntimeEnvironment* GetRuntimeEnvironment();
     CommunicationManager* GetCommunicationManager();
+    Timer* GetTimer();
 
     /**
      * Setting of the scheduler type.
@@ -131,13 +132,12 @@ public:
         context->os = this;
         context->task = m_scheduler->CreateTask(priority,
                                                 execution_specification);
-        context->task->SetEcu(this->GetEcu());
 
         SwfType* swf = new SwfType(context);
         context->task->AddSwf(swf);
 
-        m_timer->SetAbsAlarm(context->task, start, cycle);
-        m_timer->SetRelAlarm(context->task, start, cycle);
+        m_timer->SetAbsAlarm(m_scheduler, start, cycle);
+        m_timer->SetRelAlarm(m_scheduler, start, cycle);
 
         return context->task;
     }

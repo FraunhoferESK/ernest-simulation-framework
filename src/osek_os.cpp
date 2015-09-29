@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ERNEST.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <ernest/simulator.hpp>
 #include <ernest/ernest_addition.hpp>
 #include <ernest/osek_os.hpp>
 #include <ernest/alarm.hpp>
@@ -45,7 +46,7 @@ void OsekOS::Update()
 {
     m_com->Update();
     m_timer->Update();
-    m_scheduler->Schedule();
+    m_scheduler->Update();
 }
 
 RuntimeEnvironment* OsekOS::GetRuntimeEnvironment()
@@ -56,6 +57,11 @@ RuntimeEnvironment* OsekOS::GetRuntimeEnvironment()
 CommunicationManager* OsekOS::GetCommunicationManager()
 {
 	return m_com;
+}
+
+Timer* OsekOS::GetTimer()
+{
+	return m_timer;
 }
 
 void OsekOS::ReceiveSignalRaw(SignalId signal_id, void* data, size_t length)
@@ -76,7 +82,7 @@ void OsekOS::SetCanRoutingTable(SignalId signalId, CanId canId)
 void OsekOS::DeclareAlarm(Time start, Time cycle, Task* task)
 {
     // Setting up of Alarm for DeclareTask.
-    m_timer->SetRelAlarm(task, start, cycle);
+    m_timer->SetRelAlarm(m_scheduler, start, cycle);
 }
 
 void OsekOS::DeclareAlarm(double start, double cycle, Task* task)
