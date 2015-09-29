@@ -31,12 +31,6 @@ namespace ERNEST
 SoftwareFunction::SoftwareFunction(TaskContext* context)
 {
     m_context = context;
-    m_timer = new Timer();
-}
-
-SoftwareFunction::~SoftwareFunction(void)
-{
-    delete m_timer;
 }
 
 void SoftwareFunction::SetTask(Task* task)
@@ -51,17 +45,7 @@ Task* SoftwareFunction::GetTask()
 
 void SoftwareFunction::WaitEvent()
 {
-    wait(m_context->task->start);
-}
 
-void SoftwareFunction::SetAbsAlarm(AlarmListener* listener, double start, double cycle)
-{
-    m_timer->SetAbsAlarm(listener, milliseconds(start), milliseconds(cycle));
-}
-
-void SoftwareFunction::SetRelAlarm(AlarmListener* listener, double start, double cycle)
-{
-    m_timer->SetRelAlarm(listener, milliseconds(start), milliseconds(cycle));
 }
 
 } // namespace ERNEST

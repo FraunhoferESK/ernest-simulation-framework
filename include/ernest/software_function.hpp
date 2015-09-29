@@ -61,24 +61,6 @@ public:
     void SetTask(Task* task);
 
     /**
-     * Function SetAbsAlarm for accessing Task from the Software Function.
-     *
-     * @param listener for accessing the alarm.
-     * @param start for setting the start time of the task.
-     * @param cycle will give the period of execution of task.
-     */
-    void SetAbsAlarm(AlarmListener* listener, double start, double cycle);
-
-    /**
-     * Function SetRelAlarm for accessing Task from the Software Function.
-     *
-     * @param listener for accessing the alarm.
-     * @param start for setting the start time of the task.
-     * @param cycle will give the period of execution of task.
-     */
-    void SetRelAlarm(AlarmListener* listener, double start, double cycle);
-
-    /**
      * Function GetTask for getting the Task for the software function.
      *
      * @return pointer to task
@@ -115,7 +97,6 @@ private:
 
     void DeclareAlarm(Alarm*);
 
-    Timer* m_timer;
 };
 
 } // namespace ERNEST
