@@ -47,7 +47,7 @@ public:
      * @param context as TaskContext
      */
     SoftwareFunction(TaskContext *context);
-    virtual ~SoftwareFunction();
+    virtual ~SoftwareFunction() {};
 
     virtual void PullPorts() = 0;
     virtual void Exec() = 0;
