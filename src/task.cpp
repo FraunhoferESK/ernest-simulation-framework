@@ -26,7 +26,7 @@
 namespace ERNEST
 {
 
-Task::Task(sc_module_name instname) :
+Task::Task(const char* instname) :
 	m_ecu(nullptr),
 	m_priority(0),
 	m_deadline(0),
@@ -36,7 +36,6 @@ Task::Task(sc_module_name instname) :
 	m_alarm(nullptr)
 {
     m_move_task_state = false;
-    m_process_handle = sc_get_current_process_handle();
 }
 
 Task::~Task()
@@ -50,97 +49,42 @@ TaskState Task::Execute(Time& max_runtime)
 {
     list<SoftwareFunction*>::iterator it;
 
-	for (it = m_software_functions.begin(); it != m_software_functions.end(); it++) {
-		(*it)->PullPorts();
-		(*it)->Exec();
-		Simulator::Wait(m_execution_interface->GetExecutionTime());
-		(*it)->PushPorts();
+	// If we start executing the task, we pull all ports
+	if (m_current_runtime == milliseconds(0)) {
+		for (it = m_software_functions.begin(); it != m_software_functions.end(); it++) {
+			(*it)->PullPorts();
+		}
+	}
+
+	if (m_current_runtime + max_runtime <= m_max_runtime) {
+		Simulator::Wait(max_runtime);
+		m_current_runtime += max_runtime;
+		m_total_runtime += max_runtime;
+	} else {
+		Time delta = m_max_runtime - m_current_runtime;
+		Simulator::Wait(delta);
+
+		for (it = m_software_functions.begin(); it != m_software_functions.end(); it++) {
+			(*it)->Exec();
+			(*it)->PushPorts();
+		}
+
+		m_current_runtime = 0;
+		m_total_runtime += delta;
 	}
 
 	return SUSPENDED;
 }
 
-void Task::SetState(TaskState state)
+Time Task::RemainingExecutionTime()
 {
-    switch (state) {
-    case READY:
-        m_current_state = READY;
-        break;
-    case SUSPENDED:
-        assert(m_current_state == RUNNING);
-        m_current_state = SUSPENDED;
-        break;
-    case RUNNING:
-        assert(m_current_state == READY);
-        m_current_state = RUNNING;
-        break;
-    case WAITING:
-        assert(m_current_state == RUNNING);
-        m_current_state = WAITING;
-        break;
-    default:
-        assert(false);
-    }
-}
-
-void Task::SimulationWait()
-{
-    wait(start);
-}
-
-void Task::SimulationNotify()
-{
-    start.notify();
-}
-
-void Task::Preempt()
-{
-    assert(false);
-    assert(m_current_state == RUNNING);
-    m_current_state = READY;
-
-    // Schedule Tasks
-    m_scheduler->Schedule();
-
-    wait(start);
-}
-
-void Task::Wait()
-{
-    assert(m_current_state == RUNNING);
-    m_current_state = WAITING;
-
-    // Schedule Tasks
-    m_scheduler->Schedule();
-
-    wait(start);
-}
-
-void Task::Release()
-{
-    assert(m_current_state == WAITING);
-    m_current_state = READY;
-}
-
-TaskState Task::GetTaskState()
-{
-    return m_current_state;
+	return m_max_runtime - m_current_runtime;
 }
 
 void Task::AddSwf(SoftwareFunction* swf)
 {
     m_software_functions.push_front(swf);
     swf->SetTask(this);
-}
-
-void Task::SetScheduler(Scheduler* scheduler)
-{
-    m_scheduler = scheduler;
-}
-
-Scheduler* Task::GetScheduler()
-{
-    return m_scheduler;
 }
 
 SoftwareFunction* Task::GetSwf()
@@ -188,11 +132,6 @@ void Task::SetTaskActivationTime(Time activation_time)
                                + m_deadline, Milliseconds);
 }
 
-void Task::Notify() 
-{
-    m_scheduler->SignalTask(this);
-}
-
 bool Task::operator<(const Task& other) const
 {
     return m_priority < other.m_priority;
@@ -206,16 +145,6 @@ bool TaskCompare(const Task* lhs, const Task* rhs)
 void Task::SetExecutionSpecification(ExecutionSpecificationInterface* execution_specificaton)
 {
     m_execution_interface = execution_specificaton;
-}
-
-void Task::SetEcu(Ecu* ecu)
-{
-    m_ecu = ecu;
-}
-
-Ecu* Task::GetEcu()
-{
-    return m_ecu;
 }
 
 void Task::SetMoveTaskState(bool move_task_state)

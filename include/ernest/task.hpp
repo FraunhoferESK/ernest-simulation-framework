@@ -61,13 +61,11 @@ enum TaskState {
     WAITING
 };
 
-class Task : public AlarmListener
+class Task
 {
 
 public:
-    sc_event start;
-    sc_mutex state_lock;
-    Task(sc_module_name instname);
+    Task(const char* instname);
     ~Task();
 
     /**
@@ -83,6 +81,11 @@ public:
      * @param swf a pointer to a software function.
      */
     void RemoveSwf(SoftwareFunction* swf);
+
+    /**
+     *
+     */
+    Time RemainingExecutionTime();
 
     /**
      * The priority of this tasks.
@@ -143,51 +146,12 @@ public:
     void SetTaskActivationTime(Time activation_time);
 
     /**
-     * Set the state of this task.
-     *
-     * @param state the new state of this task.
-     */
-    void SetState(TaskState state);
-
-    /**
      * The task's main loop.
      *
      * Execute associated software functions, pull and push their
      * ports.
      */
     TaskState Execute(Time& max_runtime);
-
-    /**
-     * Preempt this task
-     */
-    void Preempt();
-
-    /**
-     * Set this task ready, if it was in waiting state.
-     */
-    void Release();
-
-    /**
-     * This tasks state.
-     *
-     * @return The current state of this task
-     */
-    TaskState GetTaskState();
-
-    /**
-     * Halt simulation until notification.
-     */
-    void SimulationWait();
-
-    /**
-     * Resume simulation.
-     */
-    void SimulationNotify();
-
-    /**
-     * Implementation for \ref AlarmListener.
-     */
-    void Notify();
 
     bool operator<(const Task & other) const;
 
@@ -199,39 +163,11 @@ public:
     SoftwareFunction* GetSwf();
 
     /**
-     * Associate this task with a scheduler.
-     *
-     * @param scheduler the scheduler this task belongs to.
-     */
-    void SetScheduler(Scheduler* scheduler);
-
-    /**
-     * The associated scheduler.
-     *
-     * @return The associated scheduler.
-     */
-    Scheduler* GetScheduler();
-
-    /**
      * Method for providing various execution details.
      *
      * @param execution_specificaton Execution specification of this task.
      */
     void SetExecutionSpecification(ExecutionSpecificationInterface* execution_specificaton);
-
-    /**
-     * Sets the ECU on which the task runs
-     *
-     * @param ecu Reference to the ECU on which the task runs
-     */
-    void SetEcu(Ecu* ecu);
-
-    /**
-     * Gets the ECU on which the task runs
-     *
-     * @return ECU on which the task runs
-     */
-    Ecu* GetEcu();
 
     /**
      * Sets the state to indicate if a running task is moved from current ECU
@@ -288,6 +224,7 @@ private:
     bool m_move_task_state;
     Alarm* m_alarm;
 
+    Time m_max_runtime;
     Time m_current_runtime;
     Time m_total_runtime;
 };
