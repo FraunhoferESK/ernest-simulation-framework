@@ -17,9 +17,11 @@
  * along with ERNEST.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <ernest/ernest_systemc.hpp>
+#include <ernest/simulator.hpp>
 #include <ernest/task.hpp>
 #include <ernest/round_robin.hpp>
 #include <ernest/ernest_addition.hpp>
+#include <ernest/osek_os.hpp>
 
 namespace ERNEST
 {
@@ -28,79 +30,82 @@ RoundRobin::RoundRobin() :  m_ready_task_list(TaskCompare), m_running_task(nullp
 {
 }
 
-void RoundRobin::Schedule()
+Task* RoundRobin::Schedule()
 {
-    // There is a task, but it has to be checked if it is still running
-    if (m_running_task != nullptr) {
-        assert(m_running_task->GetTaskState() == RUNNING);
-    } else if (!m_ready_task_list.empty()) {
-        StartTask();
-    }
+	if (m_running_task != nullptr) {
+		if (m_running_task->RemainingExecutionTime() == 0) {
+			WaitRunningTask();
+			StartReadyTask();
+		}
+	} else {
+		// There is currently no task to execute
+		StartReadyTask();
+	}
+
+	return m_running_task;
+}
+
+/**
+ * Puts the currently running task into the wait queue
+ */
+void RoundRobin::WaitRunningTask()
+{
+	m_waiting_task_list.push_back(m_running_task);
+	m_running_task = nullptr;
 }
 
 void RoundRobin::SignalTask(Task* task)
 {
-
-    if (task->GetTaskState() == RUNNING) {
-        task->SimulationNotify();
-        return;
-    }
-
-    if (task->GetTaskState() == SUSPENDED) {
-        ActivateTask(task);
-    }
+	// TODO
 }
 
 void RoundRobin::ActivateTask(Task* task)
 {
-    assert(task->GetTaskState() == SUSPENDED);
     assert(task != m_running_task);
     m_suspended_task_list.remove(task);
     m_ready_task_list.push(task);
-    task->SetState(READY);
+
 }
 
 void RoundRobin::TerminateTask(Task* task)
 {
     if(!task->GetMoveTaskState())
     {
-        assert(task->GetTaskState() == RUNNING);
         assert(m_running_task == task) ;
         m_running_task = nullptr;
         m_suspended_task_list.push_back(task);
-        task->SetState(SUSPENDED);
         Schedule();
-        task->SimulationWait();
     }
     else
     {
         task->SetMoveTaskState(false);
         m_suspended_task_list.push_back(task);
-        task->SetState(SUSPENDED);
         Schedule();
-        task->SimulationWait();
     }
 }
 
-void RoundRobin::StartTask()
+void RoundRobin::StartReadyTask()
 {
-    assert(m_running_task == nullptr);
-    m_running_task = m_ready_task_list.top();
-    m_ready_task_list.pop();
-    m_running_task->SetState(RUNNING);
-    m_running_task->SimulationNotify();
+	if (m_ready_task_list.empty()) {
+		m_running_task = nullptr;
+	} else {
+		m_running_task = m_ready_task_list.top();
+		m_ready_task_list.pop();
+	}
 }
 
 Task* RoundRobin::CreateTask(
-    int priority, ExecutionSpecificationInterface* execution_specification)
+    int priority, Time start, Time cycle, ExecutionSpecificationInterface* execution_specification)
 {
     Task* task = new Task("TASK");
 
-    task->SetScheduler(this);
     task->SetPriority(priority);
     task->SetExecutionSpecification(execution_specification);
 
     m_suspended_task_list.push_back(task);
+
+    GetOsekOs()->GetTimer()->SetAbsAlarm(this, (int) task, start, cycle);
+    GetOsekOs()->GetTimer()->SetRelAlarm(this, (int) task, start, cycle);
 
     return task;
 }
@@ -108,14 +113,17 @@ void RoundRobin::InsertTask(Task* task)
 {
     if(!task->GetMoveTaskState())
     {
-        task->SetScheduler(this);
-        task->SetState(READY);
         m_ready_task_list.push(task);
     }
     else
     {
-        task->SetScheduler(this);
+
     }
+}
+
+void RoundRobin::Notify(int id)
+{
+	ActivateTask((Task*) id);
 }
 
 void RoundRobin::DeleteTask(Task* task)

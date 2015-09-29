@@ -41,10 +41,10 @@ public:
      * @param execution_specification The execution specification of the task.
      * @return new task.
      */
-    Task* CreateTask(int priority, ExecutionSpecificationInterface* execution_specification);
+    Task* CreateTask(int priority, Time start, Time cycle, ExecutionSpecificationInterface* execution_specification);
 
     void SignalTask(Task* task);
-    void Schedule();
+    Task* Schedule();
     void TerminateTask(Task* task);
     void StartTask();
 
@@ -64,10 +64,14 @@ public:
      */
     void InsertTask(Task* task);
 
+    void Notify(int id);
+
 private:
     RoundRobin(const RoundRobin&);
     RoundRobin& operator=(const RoundRobin&);
     void ActivateTask(Task* task);
+    void WaitRunningTask();
+    void StartReadyTask();
     list<Task*> m_suspended_task_list;
     priority_queue<Task*, vector<Task*>, bool (*)(const Task* lhs, const Task* rhs)> m_ready_task_list;
     list<Task*> m_waiting_task_list;
