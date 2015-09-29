@@ -105,6 +105,7 @@ public:
         }
 
         m_scheduler = new SchedulingPolicy();
+        m_scheduler->SetOsekOs(this);
     }
 
     /**
@@ -130,14 +131,11 @@ public:
     {
         TaskContext* context = new TaskContext();
         context->os = this;
-        context->task = m_scheduler->CreateTask(priority,
+        context->task = m_scheduler->CreateTask(priority, start, cycle,
                                                 execution_specification);
 
         SwfType* swf = new SwfType(context);
         context->task->AddSwf(swf);
-
-        m_timer->SetAbsAlarm(m_scheduler, start, cycle);
-        m_timer->SetRelAlarm(m_scheduler, start, cycle);
 
         return context->task;
     }

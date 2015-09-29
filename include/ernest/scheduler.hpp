@@ -21,6 +21,8 @@
 
 #include <ernest/ernest_systemc.hpp>
 #include <ernest/alarm_listener.hpp>
+#include <ernest/time.hpp>
+#include <ernest/osek_service.hpp>
 
 namespace ERNEST
 {
@@ -29,7 +31,7 @@ using namespace std;
 class Task;
 class ExecutionSpecificationInterface;
 
-class Scheduler : public AlarmListener
+class Scheduler : public AlarmListener, public OsekService
 {
 public:
     /**
@@ -48,7 +50,7 @@ public:
      * @param execution_specification The execution specification of the task.
      * @return The created task.
      */
-    virtual Task* CreateTask(int priority,
+    virtual Task* CreateTask(int priority, Time start, Time cycle,
                              ExecutionSpecificationInterface* execution_specification) = 0;
     /**
      * Resumes a suspended or waiting task. Can be used to signal a
