@@ -83,7 +83,7 @@ void OsekOS::SetCanRoutingTable(SignalId signalId, CanId canId)
 void OsekOS::DeclareAlarm(Time start, Time cycle, Task* task)
 {
     // Setting up of Alarm for DeclareTask.
-    m_timer->SetRelAlarm(m_scheduler, start, cycle);
+    m_timer->SetRelAlarm(m_scheduler, 0, start, cycle);
 }
 
 void OsekOS::DeclareAlarm(double start, double cycle, Task* task)
