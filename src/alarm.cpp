@@ -31,6 +31,7 @@ struct Alarm
     sc_time start;
     sc_time cycle;
     sc_time next_activation;
+    int id;
     bool active;
 };
 
@@ -57,7 +58,7 @@ public:
 	                }
 
 	                // Notify the client
-	                alarm->listener->Notify();
+	                alarm->listener->Notify(alarm->id);
 
 	            } else {
 	                // Decrease active timer

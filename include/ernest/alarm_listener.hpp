@@ -28,7 +28,7 @@ namespace ERNEST
 class AlarmListener
 {
 public:
-    virtual void Notify() = 0;
+    virtual void Notify(int id) = 0;
     virtual ~AlarmListener() {};
 };
 
