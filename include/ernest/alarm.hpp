@@ -58,7 +58,7 @@ public:
      * @param start The expiration time, relative to the current time
      * @param cycle The cycle time for a periodic alarm. Non-periodic if cycle equals to zero.
      */
-    void SetAbsAlarm(AlarmListener* listener, Time start, Time cycle);
+    void SetAbsAlarm(AlarmListener* listener, int id, Time start, Time cycle);
 
     /**
      * Registers an \ref AlarmListener client to be notified when the
@@ -69,7 +69,7 @@ public:
      * @param start The expiration time, relative to the original expiration time
      * @param cycle The cycle time for a periodic alarm. Non-periodic if cycle equals to zero.
      */
-    void SetRelAlarm(AlarmListener* listener, Time start, Time cycle);
+    void SetRelAlarm(AlarmListener* listener, int id, Time start, Time cycle);
 
     /**
      * Delete the alarm.

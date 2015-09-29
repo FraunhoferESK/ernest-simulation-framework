@@ -70,7 +70,7 @@ public:
 	    m_last_ts = sc_time_stamp();
 	}
 
-	void SetAbsAlarm(AlarmListener* listener, Time start, Time cycle)
+	void SetAbsAlarm(AlarmListener* listener, int id, Time start, Time cycle)
 	{
 	    Alarm* alarm = GetAlarm(listener);
 
@@ -115,12 +115,12 @@ void Timer::Update()
 	m_impl->Update();
 }
 
-void Timer::SetAbsAlarm(AlarmListener* listener, Time start, Time cycle)
+void Timer::SetAbsAlarm(AlarmListener* listener, int id, Time start, Time cycle)
 {
-    m_impl->SetAbsAlarm(listener, start, cycle);
+    m_impl->SetAbsAlarm(listener, id, start, cycle);
 }
 
-void Timer::SetRelAlarm(AlarmListener* listener, Time start, Time cycle)
+void Timer::SetRelAlarm(AlarmListener* listener, int id, Time start, Time cycle)
 {
     Alarm* alarm = GetAlarm(listener);
 
@@ -128,6 +128,7 @@ void Timer::SetRelAlarm(AlarmListener* listener, Time start, Time cycle)
     alarm->start = sc_time(start.GetMilliseconds(), SC_MS);
     alarm->cycle = sc_time(cycle.GetMilliseconds(), SC_MS);
     alarm->next_activation = alarm->cycle + alarm->start;
+    alarm->id = id;
 }
 
 void Timer::DeleteAlarm(AlarmListener* listener)
