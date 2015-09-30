@@ -17,7 +17,7 @@
  * along with ERNEST.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <algorithm>
-#include <map>
+#include <list>
 #include <ernest/ernest_systemc.hpp>
 #include <ernest/alarm.hpp>
 #include <ernest/time.hpp>
@@ -46,7 +46,7 @@ public:
 	    sc_time delta = sc_time_stamp() - m_last_ts;
 
 	    for (it = m_alarm_objects.begin(); it != m_alarm_objects.end(); ++it) {
-	        Alarm* alarm = it->second;
+	        Alarm* alarm = *it;
 	        if (alarm->active) {
 	            // Timer expired?
 	            if (alarm->next_activation <= delta) {
@@ -59,6 +59,7 @@ public:
 
 	                // Notify the client
 	                alarm->listener->Notify(alarm->id);
+	                // Remove alarm
 
 	            } else {
 	                // Decrease active timer
@@ -78,30 +79,23 @@ public:
 	    alarm->next_activation = sc_time(start.GetMilliseconds(), SC_MS);
 	}
 
-	void DeleteAlarm(AlarmListener* listener)
+	void DeleteAlarm(Alarm* alarm)
 	{
-	    m_alarm_objects.erase(listener);
+	    m_alarm_objects.remove(alarm);
 	}
 
 	Alarm* GetAlarm(AlarmListener* listener)
 	{
-	    AlarmMap::iterator it = m_alarm_objects.find(listener);
-
-	    if (it != m_alarm_objects.end())
-	    {
-	        return it->second;
-	    }
-
 	    Alarm* alarm = new Alarm();
 	    alarm->active = false;
 	    alarm->listener = listener;
 
-	    m_alarm_objects.insert(std::pair<AlarmListener*, Alarm*>(listener, alarm));
+	    m_alarm_objects.push_back(alarm);
 	    return alarm;
 	}
 
 private:
-    typedef std::map<AlarmListener*, Alarm*> AlarmMap;
+    typedef std::list<Alarm*> AlarmMap;
     AlarmMap m_alarm_objects;
     sc_time m_last_ts;
 };
@@ -131,9 +125,9 @@ void Timer::SetRelAlarm(AlarmListener* listener, int id, Time start, Time cycle)
     alarm->id = id;
 }
 
-void Timer::DeleteAlarm(AlarmListener* listener)
+void Timer::DeleteAlarm(Alarm* alarm)
 {
-    m_impl->DeleteAlarm(listener);
+    m_impl->DeleteAlarm(alarm);
 }
 
 Alarm* Timer::GetAlarm(AlarmListener* listener)

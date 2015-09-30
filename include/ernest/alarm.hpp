@@ -76,7 +76,7 @@ public:
      *
      * @param alarm Reference to the alarm to be removed.
      */
-    void DeleteAlarm(AlarmListener* listener);
+    void DeleteAlarm(Alarm* listener);
 
 private:
     /**
