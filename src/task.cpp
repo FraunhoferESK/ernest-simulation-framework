@@ -33,7 +33,8 @@ Task::Task(const char* instname) :
 	m_current_state(SUSPENDED),
 	m_scheduler(nullptr),
 	m_execution_interface(nullptr),
-	m_alarm(nullptr)
+	m_alarm(nullptr),
+	m_current_runtime(milliseconds(0))
 {
     m_move_task_state = false;
 }
@@ -57,10 +58,12 @@ TaskState Task::Execute(Time& max_runtime)
 	}
 
 	if (m_current_runtime + max_runtime <= m_max_runtime) {
+		// We are within execution of task
 		Simulator::Wait(max_runtime);
 		m_current_runtime += max_runtime;
 		m_total_runtime += max_runtime;
 	} else {
+		// We are at the end of task execution
 		Time delta = m_max_runtime - m_current_runtime;
 		Simulator::Wait(delta);
 
@@ -71,6 +74,7 @@ TaskState Task::Execute(Time& max_runtime)
 
 		m_current_runtime = 0;
 		m_total_runtime += delta;
+		m_max_runtime = m_execution_interface->GetExecutionTime();
 	}
 
 	return SUSPENDED;
@@ -145,6 +149,7 @@ bool TaskCompare(const Task* lhs, const Task* rhs)
 void Task::SetExecutionSpecification(ExecutionSpecificationInterface* execution_specificaton)
 {
     m_execution_interface = execution_specificaton;
+    m_max_runtime = m_execution_interface->GetExecutionTime();
 }
 
 void Task::SetMoveTaskState(bool move_task_state)
