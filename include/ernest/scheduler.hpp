@@ -39,6 +39,9 @@ public:
      */
     virtual ~Scheduler() {};
 
+    /**
+     * Determine the task that should run now and run it.
+     */
     virtual void Update() = 0;
 
     /**
@@ -59,11 +62,6 @@ public:
      * @param task Task that should be resumed.
      */
     virtual void SignalTask(Task* task) = 0;
-
-    /**
-     * Determine the task that should run now and run it.
-     */
-    virtual Task* Schedule() = 0;
 
 };
 
