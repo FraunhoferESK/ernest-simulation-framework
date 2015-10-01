@@ -38,7 +38,7 @@ struct Alarm
 class TimerImpl
 {
 public:
-	TimerImpl() : m_last_ts(0.0, SC_MS) {}
+	TimerImpl() : m_last_ts(sc_time_stamp()) {}
 
 	void Update()
 	{
@@ -121,7 +121,7 @@ void Timer::SetRelAlarm(AlarmListener* listener, int id, Time start, Time cycle)
     alarm->active = true;
     alarm->start = sc_time(start.GetMilliseconds(), SC_MS);
     alarm->cycle = sc_time(cycle.GetMilliseconds(), SC_MS);
-    alarm->next_activation = alarm->cycle + alarm->start;
+    alarm->next_activation = alarm->start;
     alarm->id = id;
 }
 
