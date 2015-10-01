@@ -30,19 +30,22 @@ RoundRobin::RoundRobin() :  m_ready_task_list(TaskCompare), m_running_task(nullp
 {
 }
 
-Task* RoundRobin::Schedule()
+void RoundRobin::Update()
 {
+	Time execution_budget = milliseconds(1);
+
+	if (m_running_task == nullptr) {
+		StartReadyTask();
+	}
+
 	if (m_running_task != nullptr) {
-		if (m_running_task->RemainingExecutionTime() == 0) {
+		if (m_running_task->Execute(execution_budget) == SUSPENDED) {
 			WaitRunningTask();
 			StartReadyTask();
 		}
 	} else {
-		// There is currently no task to execute
-		StartReadyTask();
+		Simulator::Wait(execution_budget);
 	}
-
-	return m_running_task;
 }
 
 /**
@@ -61,10 +64,12 @@ void RoundRobin::SignalTask(Task* task)
 
 void RoundRobin::ActivateTask(Task* task)
 {
-    assert(task != m_running_task);
+    if (task == m_running_task) {
+    	// An already running task keeps running
+    	return;
+    }
     m_suspended_task_list.remove(task);
     m_ready_task_list.push(task);
-
 }
 
 void RoundRobin::TerminateTask(Task* task)
@@ -74,13 +79,11 @@ void RoundRobin::TerminateTask(Task* task)
         assert(m_running_task == task) ;
         m_running_task = nullptr;
         m_suspended_task_list.push_back(task);
-        Schedule();
     }
     else
     {
         task->SetMoveTaskState(false);
         m_suspended_task_list.push_back(task);
-        Schedule();
     }
 }
 
@@ -104,7 +107,6 @@ Task* RoundRobin::CreateTask(
 
     m_suspended_task_list.push_back(task);
 
-    GetOsekOs()->GetTimer()->SetAbsAlarm(this, (int) task, start, cycle);
     GetOsekOs()->GetTimer()->SetRelAlarm(this, (int) task, start, cycle);
 
     return task;

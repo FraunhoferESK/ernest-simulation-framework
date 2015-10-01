@@ -44,7 +44,7 @@ public:
     Task* CreateTask(int priority, Time start, Time cycle, ExecutionSpecificationInterface* execution_specification);
 
     void SignalTask(Task* task);
-    Task* Schedule();
+    void Update();
     void TerminateTask(Task* task);
     void StartTask();
 
