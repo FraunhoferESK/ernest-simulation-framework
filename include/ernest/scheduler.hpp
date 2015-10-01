@@ -39,7 +39,7 @@ public:
      */
     virtual ~Scheduler() {};
 
-    void Update();
+    virtual void Update() = 0;
 
     /**
      * Creates a task to be used with this scheduler. The returned
