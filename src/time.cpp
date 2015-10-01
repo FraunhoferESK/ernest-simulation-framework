@@ -112,6 +112,11 @@ bool Time::operator<(Time& rhs)
     return GetMilliseconds() < rhs.GetMilliseconds();
 }
 
+bool Time::operator>(Time& rhs)
+{
+	return GetMilliseconds() > rhs.GetMilliseconds();
+}
+
 bool Time::operator<=(Time& rhs)
 {
     return GetMilliseconds() <= rhs.GetMilliseconds();

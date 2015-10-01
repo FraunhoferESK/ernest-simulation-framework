@@ -82,6 +82,7 @@ public:
 	Time operator-(Time& rhs);
 
     bool operator<(Time& rhs);
+    bool operator>(Time& rhs);
     bool operator<=(Time& rhs);
 
     bool operator==(const Time& rhs) const;
