@@ -57,15 +57,16 @@ TaskState Task::Execute(Time& max_runtime)
 		}
 	}
 
-	if (m_current_runtime + max_runtime <= m_max_runtime) {
-		// We are within execution of task
+	Time remaining_time = RemainingExecutionTime();
+
+	if (remaining_time > max_runtime) {
+		// We cant finish execution now
 		Simulator::Wait(max_runtime);
 		m_current_runtime += max_runtime;
 		m_total_runtime += max_runtime;
 	} else {
-		// We are at the end of task execution
-		Time delta = m_max_runtime - m_current_runtime;
-		Simulator::Wait(delta);
+		// We can finish task execution
+		Simulator::Wait(remaining_time);
 
 		for (it = m_software_functions.begin(); it != m_software_functions.end(); it++) {
 			(*it)->Exec();
@@ -73,11 +74,13 @@ TaskState Task::Execute(Time& max_runtime)
 		}
 
 		m_current_runtime = 0;
-		m_total_runtime += delta;
+		m_total_runtime += remaining_time;
 		m_max_runtime = m_execution_interface->GetExecutionTime();
+
+		return SUSPENDED;
 	}
 
-	return SUSPENDED;
+	return RUNNING;
 }
 
 Time Task::RemainingExecutionTime()
