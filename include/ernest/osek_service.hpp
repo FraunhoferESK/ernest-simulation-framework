@@ -25,13 +25,29 @@ namespace ERNEST
 class OsekOS;
 class OsekServiceImpl;
 
+
+/**
+ * Interface class that every service used by the OSEK OS has to implement
+ */
 class OsekService
 {
 public:
 	OsekService();
 	virtual ~OsekService();
+
+	/**
+	 * Sets the current OSEK OS the service is assigned to
+	 */
 	void SetOsekOs(OsekOS*);
+
+	/**
+	 * Gets the current OSEK OS the service is assigned to
+	 */
 	OsekOS* GetOsekOs();
+
+	/**
+	 * Update function which is regularly called by the OSEK OS
+	 */
 	virtual void Update() = 0;
 private:
 	OsekOS* m_os;
