@@ -45,12 +45,22 @@ void Simulator::SetTraceRecorder(ITraceRecorder* recorder)
 void Simulator::Init(wchar_t const* model)
 {
     m_model = model;
-    sc_set_time_resolution(1.0, SC_MS);
+    Simulator::SetTimeResolution(Time(1.0, Milliseconds));
 }
 
 void Simulator::SetDuration(Time duration)
 {
     m_duration = duration;
+}
+
+void Simulator::SetTimeResolution(const Time& resolution)
+{
+	sc_set_time_resolution(resolution.GetMilliseconds(), SC_MS);
+}
+
+const Time& Simulator::GetTimeResolution()
+{
+	return m_time_resolution;
 }
 
 void Simulator::Start()

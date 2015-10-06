@@ -51,6 +51,20 @@ public:
     static void SetDuration(Time duration);
 
     /**
+     * Sets the time resolution of the simulation.
+     *
+     * @param resolution The time resolution.
+     */
+    static void SetTimeResolution(const Time& resolution);
+
+    /**
+     * Get the current time resolution of the simulator
+     *
+     * @returns The current time resolution.
+     */
+    static const Time& GetTimeResolution();
+
+    /**
      * Start the simulation.
      */
     static void Start();
@@ -118,6 +132,7 @@ private:
     Simulator& operator=(const Simulator&);
 
     static Time m_duration;
+    static Time m_time_resolution;
     static wchar_t const* m_model;
     static ITraceRecorder* m_trace_recorder;
 };
