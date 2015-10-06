@@ -32,7 +32,7 @@ RoundRobin::RoundRobin() :  m_ready_task_list(TaskCompare), m_running_task(nullp
 
 void RoundRobin::Update()
 {
-	Time execution_budget = milliseconds(1);
+	Time execution_budget = Simulator::GetTimeResolution();
 
 	if (m_running_task == nullptr) {
 		StartReadyTask();
