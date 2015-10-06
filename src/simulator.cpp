@@ -87,7 +87,7 @@ Time Simulator::TimeStamp()
     return Time(ts.to_double(), Milliseconds);
 }
 
-void Simulator::Wait(Time t)
+void Simulator::Wait(const Time& t)
 {
 	wait(sc_time(t.GetMilliseconds(), SC_MS));
 }

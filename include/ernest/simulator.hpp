@@ -104,7 +104,7 @@ public:
     /**
      * Elapse time in simulator.
      */
-    static void Wait(Time t);
+    static void Wait(const Time& t);
 
 private:
     /**
