@@ -63,6 +63,19 @@ public:
      */
     virtual void SignalTask(Task* task) = 0;
 
+    /**
+     * Activates a task that was previously suspended or terminated
+     *
+     * @param task Task that should be activated.
+     */
+    virtual void ActivateTask(Task* task) = 0;
+
+    /**
+     * Terminates a running ar active task
+     *
+     * @param task Task that should be terminated.
+     */
+    virtual void TerminateTask(Task* task) = 0;
 };
 
 } // namespace ERNEST
