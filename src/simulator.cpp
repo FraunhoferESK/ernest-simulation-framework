@@ -26,7 +26,8 @@ namespace ERNEST
 
 ITraceRecorder* Simulator::m_trace_recorder = nullptr;
 wchar_t const* Simulator::m_model = L"undefined";
-Time  Simulator::m_duration = seconds(0);
+Time Simulator::m_duration = seconds(0);
+Time Simulator::m_time_resolution = Time(1.0, Milliseconds);
 
 ITraceRecorder* Simulator::GetTraceRecorder()
 {
@@ -55,6 +56,7 @@ void Simulator::SetDuration(Time duration)
 
 void Simulator::SetTimeResolution(const Time& resolution)
 {
+	m_time_resolution = resolution;
 	sc_set_time_resolution(resolution.GetMilliseconds(), SC_MS);
 }
 
