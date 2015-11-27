@@ -28,6 +28,7 @@ namespace ERNEST {
 using namespace std;
 
 bool TaskCompare(const Task* lhs, const Task* rhs);
+class OsekOS;
 
 class RoundRobin : public Scheduler
 {
@@ -44,7 +45,7 @@ public:
     Task* CreateTask(int priority, Time start, Time cycle, ExecutionSpecificationInterface* execution_specification);
 
     void SignalTask(Task* task);
-    void Update();
+    void Update(OsekOS* osekos);
     void TerminateTask(Task* task);
     void StartTask();
 

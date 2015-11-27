@@ -30,6 +30,7 @@ using namespace std;
 
 class Task;
 class ExecutionSpecificationInterface;
+class OsekOS;
 
 class Scheduler : public AlarmListener, public OsekService
 {
@@ -42,7 +43,7 @@ public:
     /**
      * Determine the task that should run now and run it.
      */
-    virtual void Update() = 0;
+    virtual void Update(OsekOS* osekos) = 0;
 
     /**
      * Creates a task to be used with this scheduler. The returned

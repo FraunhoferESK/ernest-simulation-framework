@@ -30,7 +30,7 @@ RoundRobin::RoundRobin() :  m_ready_task_list(TaskCompare), m_running_task(nullp
 {
 }
 
-void RoundRobin::Update()
+void RoundRobin::Update(OsekOS* osekos)
 {
 	Time execution_budget = Simulator::GetTimeResolution();
 
@@ -106,8 +106,6 @@ Task* RoundRobin::CreateTask(
     task->SetExecutionSpecification(execution_specification);
 
     m_suspended_task_list.push_back(task);
-
-    GetOsekOs()->GetTimer()->SetRelAlarm(this, (int) task, start, cycle);
 
     return task;
 }

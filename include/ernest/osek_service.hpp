@@ -23,7 +23,6 @@ namespace ERNEST
 {
 
 class OsekOS;
-class OsekServiceImpl;
 
 
 /**
@@ -32,25 +31,15 @@ class OsekServiceImpl;
 class OsekService
 {
 public:
-	OsekService();
-	virtual ~OsekService();
-
-	/**
-	 * Sets the current OSEK OS the service is assigned to
-	 */
-	void SetOsekOs(OsekOS*);
-
-	/**
-	 * Gets the current OSEK OS the service is assigned to
-	 */
-	OsekOS* GetOsekOs();
+    virtual ~OsekService() {};
 
 	/**
 	 * Update function which is regularly called by the OSEK OS
+     * 
+     * @param osekos Pointer to the OsekOS calling the Update function
 	 */
-	virtual void Update() = 0;
-private:
-	OsekOS* m_os;
+	virtual void Update(OsekOS* osekos) = 0;
+
 };
 
 } // namespace ERNEST

@@ -40,7 +40,7 @@ class TimerImpl
 public:
 	TimerImpl() : m_last_ts(sc_time_stamp()) {}
 
-	void Update()
+	void Update(OsekOS* osekos)
 	{
 	    AlarmMap::iterator it;
 	    sc_time delta = sc_time_stamp() - m_last_ts;
@@ -104,9 +104,9 @@ Timer::Timer() : m_impl(new TimerImpl())
 {
 }
 
-void Timer::Update()
+void Timer::Update(OsekOS* osekos)
 {
-	m_impl->Update();
+	m_impl->Update(osekos);
 }
 
 void Timer::SetAbsAlarm(AlarmListener* listener, int id, Time start, Time cycle)

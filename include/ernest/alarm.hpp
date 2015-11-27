@@ -47,7 +47,7 @@ public:
      * During update expired alarms are checked and the registered
      * clients (\ref AlarmListener) are notified.
      */
-    void Update();
+    void Update(OsekOS* osekos);
 
     /**
      * Registers an \ref AlarmListener client to be notified when the
