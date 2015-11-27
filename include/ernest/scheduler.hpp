@@ -32,7 +32,7 @@ class Task;
 class ExecutionSpecificationInterface;
 class OsekOS;
 
-class Scheduler : public AlarmListener, public OsekService
+class Scheduler : public AlarmListener, public IOsekService
 {
 public:
     /**

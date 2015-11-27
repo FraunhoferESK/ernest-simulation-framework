@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with ERNEST.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ERNEST_OSEK_SERVICE_HEADER
-#define ERNEST_OSEK_SERVICE_HEADER
+#ifndef ERNEST_IOSEK_SERVICE_HEADER
+#define ERNEST_IOSEK_SERVICE_HEADER
 
 namespace ERNEST
 {
@@ -28,10 +28,10 @@ class OsekOS;
 /**
  * Interface class that every service used by the OSEK OS has to implement
  */
-class OsekService
+class IOsekService
 {
 public:
-    virtual ~OsekService() {};
+    virtual ~IOsekService() {};
 
 	/**
 	 * Update function which is regularly called by the OSEK OS
@@ -44,4 +44,4 @@ public:
 
 } // namespace ERNEST
 
-#endif /* ERNEST_OSEK_SERVICE_HEADER */
+#endif /* ERNEST_IOSEK_SERVICE_HEADER */

@@ -38,7 +38,7 @@ struct Alarm;
  * This class provides timer functionality. It allows clients which
  * implement \ref AlarmListener to be notified when the timer expires.
  */
-class Timer : public OsekService
+class Timer : public IOsekService
 {
 public:
 	Timer();
