@@ -43,6 +43,8 @@ class Timer : public IOsekService
 public:
 	Timer();
 
+	IOsekService* Create();
+
     /**
      * During update expired alarms are checked and the registered
      * clients (\ref AlarmListener) are notified.

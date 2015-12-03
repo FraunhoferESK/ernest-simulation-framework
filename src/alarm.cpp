@@ -104,6 +104,11 @@ Timer::Timer() : m_impl(new TimerImpl())
 {
 }
 
+IOsekService* Timer::Create()
+{
+	return new Timer();
+}
+
 void Timer::Update(OsekOS* osekos)
 {
 	m_impl->Update(osekos);
