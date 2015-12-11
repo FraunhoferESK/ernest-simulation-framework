@@ -35,6 +35,8 @@ class RoundRobin : public Scheduler
 public:
     RoundRobin();
 
+    IOsekService* Create();
+
     /**
      * Function CreateTask used for creating a task which is pointing to Task.
      *

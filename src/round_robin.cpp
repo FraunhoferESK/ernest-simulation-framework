@@ -30,6 +30,11 @@ RoundRobin::RoundRobin() :  m_ready_task_list(TaskCompare), m_running_task(nullp
 {
 }
 
+IOsekService* RoundRobin::Create()
+{
+    return new RoundRobin();
+}
+
 void RoundRobin::Update(OsekOS* osekos)
 {
 	Time execution_budget = Simulator::GetTimeResolution();
