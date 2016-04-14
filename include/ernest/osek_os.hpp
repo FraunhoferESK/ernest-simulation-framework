@@ -98,13 +98,18 @@ public:
      * @tparam SchedulingPolicy denotes the type of scheduler used.
      */
     template <typename SchedulingPolicy>
-    void SetScheduler()
+    SchedulingPolicy* SetScheduler()
     {
+    	SchedulingPolicy* scheduler;
+
         if (m_scheduler != nullptr) {
             delete m_scheduler;
         }
 
-        m_scheduler = new SchedulingPolicy();
+        scheduler = new SchedulingPolicy();
+        m_scheduler = scheduler;
+
+        return scheduler;
     }
 
     /**
