@@ -74,15 +74,18 @@ void RoundRobin::ActivateTask(Task* task)
     	return;
     }
     m_suspended_task_list.remove(task);
-    m_ready_task_list.push(task);
+    m_ready_task_list.insert(task);
 }
 
 void RoundRobin::TerminateTask(Task* task)
 {
     if(!task->GetMoveTaskState())
     {
-        assert(m_running_task == task) ;
-        m_running_task = nullptr;
+        if (m_running_task == task) {
+        	m_running_task = nullptr;
+        }
+        m_waiting_task_list.remove(task);
+        m_ready_task_list.erase(task);
         m_suspended_task_list.push_back(task);
     }
     else
@@ -97,8 +100,8 @@ void RoundRobin::StartReadyTask()
 	if (m_ready_task_list.empty()) {
 		m_running_task = nullptr;
 	} else {
-		m_running_task = m_ready_task_list.top();
-		m_ready_task_list.pop();
+		m_running_task = *(m_ready_task_list.begin());
+		m_ready_task_list.erase(m_running_task);
 	}
 }
 
@@ -118,7 +121,7 @@ void RoundRobin::InsertTask(Task* task)
 {
     if(!task->GetMoveTaskState())
     {
-        m_ready_task_list.push(task);
+        m_ready_task_list.insert(task);
     }
     else
     {
@@ -143,20 +146,22 @@ void RoundRobin::DeleteTask(Task* task)
     // Remove task from m_ready_task_list.
     else if(!m_ready_task_list.empty())
     {
-        priority_queue<Task*, vector<Task*>, bool (*)(const Task* lhs, const Task* rhs)> list(TaskCompare);
+        set<Task*, bool (*)(const Task* lhs, const Task* rhs)> list(TaskCompare);
         bool task_found = false;
         unsigned int size = m_ready_task_list.size();
         for(unsigned int i = 0; i < size; i++)
         {
-            if(m_ready_task_list.top() != task)
+        	Task* top = *m_ready_task_list.begin();
+
+            if(top != task)
             {
-                list.push(m_ready_task_list.top());
-                m_ready_task_list.pop();
+                list.insert(top);
+                m_ready_task_list.erase(top);
             }
             else
             {
                 task_found = true;
-                m_ready_task_list.pop();
+                m_ready_task_list.erase(top);
             }
         }
         if(task_found)

@@ -19,7 +19,8 @@
 #ifndef ERNEST_ROUND_ROBIN_HEADER
 #define ERNEST_ROUND_ROBIN_HEADER
 
-#include <queue>
+// #include <queue>
+#include <set>
 #include <list>
 #include <ernest/scheduler.hpp>
 #include <ernest/execution_specification_interface.hpp>
@@ -76,7 +77,7 @@ private:
     void WaitRunningTask();
     void StartReadyTask();
     list<Task*> m_suspended_task_list;
-    priority_queue<Task*, vector<Task*>, bool (*)(const Task* lhs, const Task* rhs)> m_ready_task_list;
+    set<Task*, bool (*)(const Task* lhs, const Task* rhs)> m_ready_task_list;
     list<Task*> m_waiting_task_list;
     Task* m_running_task;
 };
