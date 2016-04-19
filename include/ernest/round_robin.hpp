@@ -50,6 +50,7 @@ public:
     void SignalTask(Task* task);
     void Update(OsekOS* osekos);
     void TerminateTask(Task* task);
+    void ActivateTask(Task* task);
     void StartTask();
 
     /**
@@ -73,7 +74,6 @@ public:
 private:
     RoundRobin(const RoundRobin&);
     RoundRobin& operator=(const RoundRobin&);
-    void ActivateTask(Task* task);
     void WaitRunningTask();
     void StartReadyTask();
     list<Task*> m_suspended_task_list;
