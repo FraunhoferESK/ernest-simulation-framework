@@ -22,6 +22,7 @@
 #include <ernest/round_robin.hpp>
 #include <ernest/ernest_addition.hpp>
 #include <ernest/osek_os.hpp>
+#include <algorithm>
 
 namespace ERNEST
 {
@@ -73,26 +74,30 @@ void RoundRobin::ActivateTask(Task* task)
     	// An already running task keeps running
     	return;
     }
-    m_suspended_task_list.remove(task);
-    m_ready_task_list.insert(task);
+
+    // If the task is not already ready
+    if (m_ready_task_list.find(task) == m_ready_task_list.end()) {
+    	m_suspended_task_list.remove(task);
+    	m_ready_task_list.insert(task);
+    }
 }
 
 void RoundRobin::TerminateTask(Task* task)
 {
-    if(!task->GetMoveTaskState())
-    {
-        if (m_running_task == task) {
-        	m_running_task = nullptr;
-        }
-        m_waiting_task_list.remove(task);
-        m_ready_task_list.erase(task);
-    }
-    else
-    {
-        task->SetMoveTaskState(false);
-    }
+	// If the task is not already suspended
+	if (std::find(m_suspended_task_list.begin(), m_suspended_task_list.end(), task) == m_suspended_task_list.end()) {
+		if (!task->GetMoveTaskState()) {
+			if (m_running_task == task) {
+				m_running_task = nullptr;
+			}
+			m_waiting_task_list.remove(task);
+			m_ready_task_list.erase(task);
+		} else {
+			task->SetMoveTaskState(false);
+		}
 
-    m_suspended_task_list.push_back(task);
+		m_suspended_task_list.push_back(task);
+	}
 }
 
 void RoundRobin::StartReadyTask()
