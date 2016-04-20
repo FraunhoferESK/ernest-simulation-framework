@@ -86,13 +86,13 @@ void RoundRobin::TerminateTask(Task* task)
         }
         m_waiting_task_list.remove(task);
         m_ready_task_list.erase(task);
-        m_suspended_task_list.push_back(task);
     }
     else
     {
         task->SetMoveTaskState(false);
-        m_suspended_task_list.push_back(task);
     }
+
+    m_suspended_task_list.push_back(task);
 }
 
 void RoundRobin::StartReadyTask()
