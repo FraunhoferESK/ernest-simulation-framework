@@ -86,15 +86,12 @@ void RoundRobin::TerminateTask(Task* task)
 {
 	// If the task is not already suspended
 	if (std::find(m_suspended_task_list.begin(), m_suspended_task_list.end(), task) == m_suspended_task_list.end()) {
-		if (!task->GetMoveTaskState()) {
-			if (m_running_task == task) {
-				m_running_task = nullptr;
-			}
-			m_waiting_task_list.remove(task);
-			m_ready_task_list.erase(task);
-		} else {
-			task->SetMoveTaskState(false);
+		if (m_running_task == task) {
+			m_running_task = nullptr;
 		}
+
+		m_waiting_task_list.remove(task);
+		m_ready_task_list.erase(task);
 
 		m_suspended_task_list.push_back(task);
 	}
