@@ -97,6 +97,9 @@ public:
      */
     void SendSignal()
     {
+#ifdef LOG_PORTS
+        Simulator::Log() << m_name << " bound:" << m_is_bound << " out\n";
+#endif
         if (m_is_bound) {
             m_context->os->GetRuntimeEnvironment()->SendSignal(m_signal_id, m_data);
         } else {
@@ -123,6 +126,9 @@ public:
      */
     void ReadSignal()
     {
+#ifdef LOG_PORTS
+        Simulator::Log() << m_name << " bound:" << m_is_bound << " in\n";
+#endif
         if (m_is_bound) {
             m_context->os->GetRuntimeEnvironment()->ReadSignal(m_signal_id, m_data);
         } else {
