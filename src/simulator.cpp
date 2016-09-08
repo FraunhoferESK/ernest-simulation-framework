@@ -77,19 +77,19 @@ void Simulator::Start()
 
 std::ostream& Simulator::Log()
 {
-    std::cout << "[ERNEST][INFO]: ";
+    std::cout << sc_time_stamp().to_double() << " [ERNEST][INFO]: ";
     return std::cout;
 }
 
 std::ostream& Simulator::Err()
 {
-    std::cerr << "[ERNEST][ERROR]: ";
+    std::cerr << sc_time_stamp().to_double() << " [ERNEST][ERROR]: ";
     return std::cerr;
 }
 
 std::ostream& Simulator::Warning()
 {
-    std::cout << "[ERNEST][WARNING]: ";
+    std::cout << sc_time_stamp().to_double() << " [ERNEST][WARNING]: ";
     return std::cout;
 }
 
